@@ -22,11 +22,13 @@ function Food:new()
   self.x = love.math.random(love.graphics.getWidth())
   self.y = love.math.random(love.graphics.getHeight())
   self.size = 20
+  self.color = {.88, .30, .30}
   return self
 end
 
 function Food:draw()
-  love.graphics.setColor(.88, .30, .30)
+  local r,g,b = self.color
+  love.graphics.setColor(r,g,b)
   love.graphics.rectangle('fill', self.x, self.y, self.size, self.size)
 end
 
@@ -50,6 +52,15 @@ function love.update(dt)
       snake.y = snake.y + 100*dir.dy*dt
     end
   end
+
+  local dx = (snake.x - food.x)
+  local dy = (snake.y - food.y)
+
+  if dx^2 + dy^2 < snake.size^2 then
+    food.color = {.20,.88,.10}
+end
+
+    
 end
 
 
