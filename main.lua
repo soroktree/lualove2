@@ -12,6 +12,8 @@ end
 
 function Snake:grow(dir)
   table.insert(self.tail, 1, {x = self.x, y = self.y})
+  self.x = dir.x * self.size
+  self.x = dir.y * self.size
 end
 
 
