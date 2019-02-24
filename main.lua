@@ -70,6 +70,7 @@ function love.update(dt)
 
   if dx^2 + dy^2 < snake.size^2 then
     food.color = {.20,.88,.10}
+    snake:grow({x=1,y=0})
 end
 
     
