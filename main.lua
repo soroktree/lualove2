@@ -1,18 +1,28 @@
 Snake = {}
+Snake.__index = Snake
 
 function Snake:new()
-  o = {}
-  o.x = love.graphics.getWidth() / 2
-  o.y = love.graphics.getHeight() / 2
-  o.size = 20
-  self.__index = self
-  return setmetatable(o, self)
+  self = setmetatable({}, self)
+  self.x = love.graphics.getWidth() / 2
+  self.y = love.graphics.getHeight() / 2
+  self.tail = {}
+  self.size = 20
+  return self
 end
+
+function Snake:grow(dir)
+  table.insert(self.tail, 1, {x = self.x, y = self.y})
+end
+
 
 function Snake:draw()
   love.graphics.setColor(.44, .55, .66)
   love.graphics.rectangle('fill', self.x, self.y, self.size, self.size)
+  for i, t in ipairs(self.tail) do
+    love.graphics.rectangle('fill', t.x, t.y, self.size, self.size)
+  end
 end
+
 
 Food = {}
 Food.__index = Food
