@@ -38,9 +38,9 @@ Food.__index = Food
 
 function Food:new()
   self = setmetatable({},self)
-  self.x = love.math.random(love.graphics.getWidth())
-  self.y = love.math.random(love.graphics.getHeight())
   self.size = 20
+  self.x = love.math.random(love.graphics.getWidth()-self.size)
+  self.y = love.math.random(love.graphics.getHeight()-self.size)
   self.color = {.88, .30, .30}
   return self
 end
@@ -82,7 +82,7 @@ function love.update(dt)
   local dy = (snake.tail[1].y - food.y)
 
   if dx^2 + dy^2 < snake.size^2 then
-    food.color = {.20,.88,.10}
+    food = Food:new()
     snake:grow(direction)
   end
 end
