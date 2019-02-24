@@ -3,23 +3,30 @@ Snake.__index = Snake
 
 function Snake:new()
   self = setmetatable({}, self)
-  self.x = love.graphics.getWidth() / 2
-  self.y = love.graphics.getHeight() / 2
-  self.tail = {}
+  local head = {x = love.graphics.getWidth() / 2,
+                y = love.graphics.getHeight() / 2}
+  self.tail = {head}
   self.size = 20
   return self
 end
 
 function Snake:grow(dir)
-  table.insert(self.tail, 1, {x = self.x, y = self.y})
-  self.x = dir.x * self.size
-  self.x = dir.y * self.size
+  local head = self.tail[1]
+  local new_head = {x = head.x + dir.x*self.size, y = head.y + dir.y*self.size}
+  table.insert(self.tail, 1, new_head)
+end
+
+
+function Snake:move(dir)
+  local head = self.tail[1]
+  local new_head = {x = head.x + dir.dx*self.size, y = head.y + dir.dy*self.size}
+  table.insert(self.tail, 1, new_head)
+  table.remove(self.tail)
 end
 
 
 function Snake:draw()
   love.graphics.setColor(.44, .55, .66)
-  love.graphics.rectangle('fill', self.x, self.y, self.size, self.size)
   for i, t in ipairs(self.tail) do
     love.graphics.rectangle('fill', t.x, t.y, self.size, self.size)
   end
@@ -60,13 +67,13 @@ keys = {
 function love.update(dt)
   for key, dir in pairs(keys) do
     if love.keyboard.isDown(key) then
-      snake.x = snake.x + 100*dir.dx*dt
-      snake.y = snake.y + 100*dir.dy*dt
+      snake:move(dir)
+      break
     end
   end
 
-  local dx = (snake.x - food.x)
-  local dy = (snake.y - food.y)
+  local dx = (snake.tail[1].x - food.x)
+  local dy = (snake.tail[1].y - food.y)
 
   if dx^2 + dy^2 < snake.size^2 then
     food.color = {.20,.88,.10}
