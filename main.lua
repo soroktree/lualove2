@@ -14,9 +14,25 @@ function Snake:draw()
   love.graphics.rectangle('fill', self.x, self.y, self.size, self.size)
 end
 
+Food = {}
+Food.__index = Food
+
+function Food:new()
+  self = setmetatable({},self)
+  self.x = love.math.random(love.graphics.getWidth())
+  self.y = love.math.random(love.graphics.getHeight())
+  self.size = 20
+  return self
+end
+
+function Food:draw()
+  love.graphics.setColor(.88, .30, .30)
+  love.graphics.rectangle('fill', self.x, self.y, self.size, self.size)
+end
 
 function love.load()
   snake = Snake:new()
+  food = Food:new()
 end
 
 
@@ -39,6 +55,7 @@ end
 
 function love.draw()
   snake:draw()
+  food:draw()
 end
 
 
