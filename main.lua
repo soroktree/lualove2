@@ -28,7 +28,7 @@ end
 function Snake:draw()
   love.graphics.setColor(.44, .55, .66)
   for i, t in ipairs(self.tail) do
-    love.graphics.rectangle('fill', t.x, t.y, self.size, self.size)
+    love.graphics.rectangle('fill', t.x, t.y, self.size-1, self.size-1)
   end
 end
 
