@@ -12,7 +12,7 @@ end
 
 function Snake:grow(dir)
   local head = self.tail[1]
-  local new_head = {x = head.x + dir.x*self.size, y = head.y + dir.y*self.size}
+  local new_head = {x = head.x + dir.dx*self.size, y = head.y + dir.dy*self.size}
   table.insert(self.tail, 1, new_head)
 end
 
@@ -64,10 +64,16 @@ keys = {
   down = {dx = 0, dy = 1},
 }
 
+time = 0
+
 function love.update(dt)
+  time = time + dt
+  if time < 0.02 then return end
+  time = 0
   for key, dir in pairs(keys) do
     if love.keyboard.isDown(key) then
       snake:move(dir)
+      direction = dir
       break
     end
   end
@@ -77,10 +83,8 @@ function love.update(dt)
 
   if dx^2 + dy^2 < snake.size^2 then
     food.color = {.20,.88,.10}
-    snake:grow({x=1,y=0})
-end
-
-    
+    snake:grow(direction)
+  end
 end
 
 
