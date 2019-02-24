@@ -6,22 +6,19 @@ function Snake:new()
   local head = {x = love.graphics.getWidth() / 2,
                 y = love.graphics.getHeight() / 2}
   self.tail = {head}
+  self.direction = {dx = 1, dy = 0}
   self.size = 20
   return self
 end
 
-function Snake:grow(dir)
+function Snake:move(grow)
   local head = self.tail[1]
-  local new_head = {x = head.x + dir.dx*self.size, y = head.y + dir.dy*self.size}
+  local new_head = {x = head.x + self.direction.dx*self.size,
+                    y = head.y + self.direction.dy*self.size}
   table.insert(self.tail, 1, new_head)
-end
-
-
-function Snake:move(dir)
-  local head = self.tail[1]
-  local new_head = {x = head.x + dir.dx*self.size, y = head.y + dir.dy*self.size}
-  table.insert(self.tail, 1, new_head)
-  table.remove(self.tail)
+  if not grow then
+    table.remove(self.tail)
+  end
 end
 
 
@@ -68,12 +65,11 @@ time = 0
 
 function love.update(dt)
   time = time + dt
-  if time < 0.02 then return end
+  if time < 0.08 then return end
   time = 0
   for key, dir in pairs(keys) do
     if love.keyboard.isDown(key) then
-      snake:move(dir)
-      direction = dir
+      snake.direction = dir
       break
     end
   end
@@ -81,9 +77,11 @@ function love.update(dt)
   local dx = (snake.tail[1].x - food.x)
   local dy = (snake.tail[1].y - food.y)
 
-  if dx^2 + dy^2 < snake.size^2 then
+  if dx^2 + dy^2 < snake.size^2 / 2 then
     food = Food:new()
-    snake:grow(direction)
+    snake:move(true)
+  else
+    snake:move()
   end
 end
 
