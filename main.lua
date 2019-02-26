@@ -48,6 +48,14 @@ function Food:draw()
   love.graphics.rectangle('fill', self.x, self.y, self.size, self.size)
 end
 
+
+function collision(a, b, size)
+  local dx = a.x - b.x
+  local dy = a.y - b.y
+  return dx^2 + dy^2 < size^2
+end
+
+
 function love.load()
   snake = Snake:new()
   food = Food:new()
@@ -74,10 +82,7 @@ function love.update(dt)
     end
   end
 
-  local dx = (snake.tail[1].x - food.x)
-  local dy = (snake.tail[1].y - food.y)
-
-  if dx^2 + dy^2 < snake.size^2 / 2 then
+  if collision(snake.tail[1], food, food.size) then
     food = Food:new()
     snake:move(true)
   else
